@@ -1,46 +1,84 @@
-# Getting Started with Create React App and Redux
+## Inicializacion del proyecto
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+`npx create-react-app 2022netflix --template redux`
 
-## Available Scripts
+### Proceso de limpieza
 
-In the project directory, you can run:
+### importar las librerias
 
-### `npm start`
+material-ui/core, axios, firebase, react-router-dom, react-uuid, styled-components
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### App.js - layout inicial
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+-creamos las rutas
+-Renderizamos Login o el resto de App condicionado a la existencia de un usuario
 
-### `npm test`
+## Estilos
+-Utilizamos useStyles para crear una infraestructura que nos permita asignar estilos a cada uno de los componentes
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## crear las carpetas de componentes : Pages
 
-### `npm run build`
+-creamos la infraestructura de los componentes que representan una pagina: Home, Login, Paypal, Profile, SignUp
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Estilos en los componentes de Pages
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+-Patron para anadir la infraestructura a todos los componentes pagina: Banner, Header, Plans, Row.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Estilos en los componentes de la carpeta components
 
-### `npm run eject`
+-creamos la infraestructura basica del resto de componentes
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Empezamos a trabajar en el componente header
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Importamos el logo
+- Anadimos al AppBar una clases tranparent condicional, Esta clase se activa si la variable show = true.
+- La variable show se convierte en true, cuando hacemos un scrool vertical de mas de 100px.
+- Para escribir cuando el usuario hace un scroll vertical, anadimos un eventListener al objetio window.
+- El eventListener esta activo una sola vez cada vez que refresquemos la pagina (useEffect con []).
+- Una vez montado el componente, hay que limpiarlo para que no nos quede colgado el eventListener
+- anadimos la rutas tanto al logo como al avatar
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### comenzamos a trabajar en el componente Banner
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Hemos importado un pedazo de imagen como backgroundImage
+- En React, tenemos que acompanar las backgroundImage con estilos como object-fit, background-size y background-position
+- Hemos posiicionado el titulo de la peli, unos botenes y la descripcion
+- como la descripcion viene de la API, tenemos que truncarla para asegurarnos de que nos cabe: Para ellosm hemos declarado la funcion truncate,
+- Hemos anadido un div vacio, que oscurece la imagen hasta fusionarla con el resto del UI, que es oscuro
 
-## Learn More
+### Comenzamos a trabajar en el login
+- Hemos creado un boton con styled components y le hemos llamado NetflixButton. Este boton esta totalmente customizado y podremos variar su longitud, color y otros estilos, pasandole props.
+- Styled components para variar los estilos del input o del boton, pero para su posicionamiento le damos una clase normal.
+- Hemos creado un input personalizado en styled components. Le hemos llamado NetflixInput. como InputBase era ya un componente de material ui, pues lo llamamos styled(InputBase). si hubiera sido un input de base styled.input``
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Componente profile
+- Hemos trabajado en la distribucion
+- <Plans>Texto</Plans>
+- `const Plans = (children) => {return ()}`
+- pasar props a tus styled components.
+- en el caso de que el componente no sea binario, p.ej el tamanio sea pequenio, grande o mediano, entonces los solucionamos con una funcion y un switch
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Signup 
+
+- Renderizado condicional, Hemos creado una variable signin.
+- Si la variable es false, desplegamos el formulario.
+
+### Proceso de registro y SignIn
+- habilitado un cuenta en firebase
+- inicializado el objeto auth
+- capturado los datos tecleados por el usuario dentro del formulario
+- registrado email y password con auth.create......
+- signin con auth.signInWithEMail...
+
+### Redux
+- Habilitamos el slice userSlice para manejar el usuario en el componente que queramos.
+
+### Persistencia
+- Hemos anadido un "event listener" en App.js
+- este event listener lo trae el objeto auth, escucha cada vez que cambia el usuario en firebase.
+- Cada vez que cambia vuelve a inyectar el usuario en la capa de datos de userSlice(Redux)
+- De esta manera recordamos que ya estamos detro aunque refresquemos la pagina.
+
+### Requests
+- Vamos a contruir el componente Row
+- Hemos habilitado todos los endponint para acceder a themoviedb, y extraer los distintos objetos con toda la informacion clasificada por genero.
